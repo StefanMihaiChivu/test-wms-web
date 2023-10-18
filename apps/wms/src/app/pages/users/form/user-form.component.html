@@ -1,0 +1,50 @@
+<p-toast></p-toast>
+<div class="wms-page">
+    <p-card [header]="editMode ? 'Edit User' : 'New User'" subheader="You can add or edit users here">
+        <div class="col p-mb-5">
+            <div class="col-12">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left"></div>
+                    <div class="p-toolbar-group-right">
+                        <p-button styleClass="p-button-primary mr-2" 
+                        [label]="editMode ? 'Update' : 'Create'"
+                        icon="pi pi-plus"
+                        (click)="onSubmit()"></p-button>
+                        <p-button styleClass="p-button-secondary" 
+                        label="Cancel"
+                        icon="pi pi-arrow-circle-left"
+                        (click)="onCancel()"></p-button>
+                    </div>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="col">
+            <div class="col-12">
+                <form [formGroup]="form">
+                    <div class="p-fluid p-formgroup grid">
+                        <div class="p-field col">
+                            <label for="title">First Name</label>
+                            <input type="text" id="firstName" pInputText formControlName="firstName"/>
+                            <small *ngIf="userForm['firstName'].invalid && isSubmited" class="p-error">First Name is required</small>
+                        </div>
+                        <div class="p-field col">
+                            <label for="title">Last Name</label>
+                            <input type="text" id="lastName" pInputText formControlName="lastName"/>
+                            <small *ngIf="userForm['lastName'].invalid && isSubmited" class="p-error">Last Name is required</small>
+                        </div>
+                        <div class="p-field col">
+                            <label for="description">Email</label>
+                            <input type="text" id="email" pInputText formControlName="email"/>
+                            <small *ngIf="userForm['email'].invalid && isSubmited" class="p-error">Email is required</small>
+                        </div>
+                        <div class="p-field col">
+                            <label for="image">Image</label>
+                            <input type="text" id="image" pInputText formControlName="image"/>
+                            <small *ngIf="userForm['image'].invalid && isSubmited" class="p-error">Avatar is required</small>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </p-card>
+</div>

@@ -1,0 +1,38 @@
+.login-register{
+    min-height: 100vh;
+    min-width: 100vh;
+    background-repeat: no-repeat;
+    background: #565867;
+    /* Old browsers */
+    background: -moz-linear-gradient(180deg, #565867 0%, #191a25 100%) fixed no-repeat;
+    /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #565867), color-stop(100%, #191a25)) fixed;
+    /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(180deg, #565867 0%, #191a25 100%) fixed;
+    /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(180deg, #565867 0%, #191a25 100%) fixed;
+    /* Opera11.10+ */
+    background: -ms-linear-gradient(180deg, #565867 0%, #191a25 100%) fixed;
+    /* IE10+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#AFB1B4', endColorstr='#696A6D', GradientType=0);
+    /* IE6-9 */
+    background: linear-gradient(180deg, #565867, #191a25) fixed;
+}
+
+.login-register-panel {
+    width: 650px;
+    height: 400px;
+    background-color: var(--surface-a);
+    position: absolute;
+    left: calc(50% - 325px);
+    top: calc(50% - 200px);
+}
+
+.login-img {
+    width: 325px;
+    height: 400px;
+}
+
+.login-btn {
+    width: 100%;
+}

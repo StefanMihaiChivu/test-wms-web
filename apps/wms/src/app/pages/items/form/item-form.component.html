@@ -1,0 +1,60 @@
+<p-toast></p-toast>
+<div class="wms-page">
+    <p-card [header]="editMode ? 'Edit Item' : 'New Item'" subheader="You can add or edit items here">
+        <div class="grid p-mb-5">
+            <div class="col-12">
+                <p-toolbar>
+                    <div class="p-toolbar-group-left"></div>
+                    <div class="p-toolbar-group-right">
+                        <p-button styleClass="p-button-primary mr-2" 
+                        [label]="editMode ? 'Update' : 'Create'"
+                        icon="pi pi-plus"
+                        (click)="onSubmit()"></p-button>
+                        <p-button styleClass="p-button-secondary" 
+                        label="Cancel"
+                        icon="pi pi-arrow-circle-left"
+                        (click)="onCancel()"></p-button>
+                    </div>
+                </p-toolbar>
+            </div>
+        </div>
+        <div class="grid">
+            <div class="col-12">
+                <form [formGroup]="form">
+                    <div class="p-fluid p-formgroup grid">
+                        <div class="p-field col">
+                            <label for="title">Title</label>
+                            <input type="text" id="title" pInputText formControlName="title"/>
+                            <small *ngIf="itemForm['title'].invalid && isSubmited" class="p-error">Title is required</small>
+                        </div>
+                        <div class="p-field col">
+                            <label for="description">Description</label>
+                            <textarea rows="5" cols="30" pInputTextarea formControlName="description"></textarea>
+                            <small *ngIf="itemForm['description'].invalid && isSubmited" class="p-error">Description is required</small>
+                        </div>
+                        <div class="p-field col">
+                            <label for="price">Price</label>
+                            <p-inputNumber mode="decimal" inputId="price" [useGrouping]="false" formControlName="price"></p-inputNumber>
+                            <small *ngIf="itemForm['price'].invalid && isSubmited" class="p-error">Price is required</small>
+                        </div>
+                        <div class="p-field col">
+                            <label for="stock">Stock</label>
+                            <p-inputNumber mode="decimal" inputId="stock" [useGrouping]="false" formControlName="stock"></p-inputNumber>
+                            <small *ngIf="itemForm['stock'].invalid && isSubmited" class="p-error">Stock is required</small>
+                        </div>
+                        <div class="p-field col">
+                            <label for="category">Category</label>
+                            <input type="text" id="category" pInputText formControlName="category"/>
+                            <small *ngIf="itemForm['category'].invalid && isSubmited" class="p-error">Category is required</small>
+                        </div>
+                        <div class="p-field col">
+                            <label for="thumbnail">Thumbnail</label>
+                            <input type="text" id="thumbnail" pInputText formControlName="thumbnail"/>
+                            <small *ngIf="itemForm['thumbnail'].invalid && isSubmited" class="p-error">Thumbnail is required</small>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </p-card>
+</div>

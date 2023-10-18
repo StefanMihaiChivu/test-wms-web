@@ -1,0 +1,162 @@
+<p-toast></p-toast>
+
+<p-splitter [panelSizes]="layoutPanelRatio" styleClass="mb-5">
+    <ng-template pTemplate>
+        <div class="col flex align-items-center justify-content-center">
+            <div class="card">
+                <p-toolbar styleClass="mb-4 gap-2">
+                    <ng-template pTemplate="left">
+                        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                            (click)="openNewItemDialog()"></button>
+                        <button pButton pRipple label="Operations" icon="pi pi-bars" class="p-button-info  mr-2"
+                            [disabled]="!selectedItems || !selectedItems.length" (click)="menu.toggle($event)"></button>
+                        <p-menu #menu [popup]="true" [model]="menuItems"></p-menu>
+                    </ng-template>
+
+                    <ng-template pTemplate="right">
+                        <button pButton pRipple label="" icon="pi pi-eye" class="p-button-success mr-2"
+                            (click)="toggleVisualiserPanel()"></button>
+                    </ng-template>
+                </p-toolbar>
+
+                <p-table #dt [value]="filteredItems" [rows]="10" [loading]="isLoading" [paginator]="true"
+                    [globalFilterFields]="['title','description', 'category']" [(selection)]="selectedItems"
+                    [rowHover]="true" dataKey="id" [showCurrentPageReport]="true"
+                    (onFilter)="syncChartWithDataTable($event)">
+                    <ng-template pTemplate="caption">
+                        <div class="flex align-items-center justify-content-between">
+                            <h3 class="m-0">Manage Items</h3>
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                    placeholder="Search..." />
+                            </span>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 4rem">
+                                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                            </th>
+                            <th style="min-width:5rem">
+                                <div>
+                                    Name
+                                    <p-columnFilter type="text" field="title" display="menu"></p-columnFilter>
+                                </div>
+                            </th>
+                            <th>Image</th>
+                            <th>
+                                <div class="flex align-items-center">
+                                    Description
+                                    <p-columnFilter type="text" field="description" display="menu"></p-columnFilter>
+                                </div>
+                            </th>
+                            <th style="min-width:10rem">
+                                <div class="flex align-items-center">
+                                    Category
+                                    <p-columnFilter type="text" field="category" display="menu"></p-columnFilter>
+                                </div>
+                            </th>
+                            <th style="min-width:10rem">
+                                <div class="flex align-items-center">
+                                    Stock
+                                    <p-columnFilter field="stock" matchMode="between" display="menu"
+                                        [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                                        <ng-template pTemplate="filter" let-filter="filterCallback">
+                                            <p-slider [ngModel]="stockValuesFilterRange" [range]="true"
+                                                (onSlideEnd)="filter($event.values)" styleClass="m-3"></p-slider>
+                                            <div class="flex align-items-center justify-content-center px-2">
+                                                <span>{{stockValuesFilterRange[0]}}</span>
+                                                <span> - </span>
+                                                <span>{{stockValuesFilterRange[1]}}</span>
+                                            </div>
+                                        </ng-template>
+                                    </p-columnFilter>
+                                </div>
+                            </th>
+                            <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
+                            <th style="min-width:8rem"></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-item>
+                        <tr>
+                            <td>
+                                <p-tableCheckbox [value]="workingItem"></p-tableCheckbox>
+                            </td>
+                            <td>{{item.title}}</td>
+                            <td><img [src]="item.thumbnail" [alt]="item.title" width="100" height="70"
+                                    class="shadow-4" /></td>
+                            <td>{{item.description}}</td>
+                            <td>{{item.category}}</td>
+                            <td>
+                                <p-tag *ngIf="item.stock > 40" icon="pi pi-check" severity="success"
+                                    value="In stock"></p-tag>
+                                <p-tag *ngIf="item.stock === 0" icon="pi pi-times" severity="danger"
+                                    value="Out of stock"></p-tag>
+                                <p-tag *ngIf="item.stock < 40 && item.stock > 0" icon="pi pi-exclamation-triangle"
+                                    severity="warning" value="Low stock"></p-tag>
+                            </td>
+                            <td>{{item.price | currency:'USD'}}</td>
+                            <td>
+                                <button pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-success mr-2" (click)="editItem(item)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                    (click)="deleteItem(item)"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="summary">
+                        <div class="flex align-items-center justify-content-between">
+                            {{items ? items.length : 0 }} items.
+                        </div>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate>
+        <p-card *ngIf="toggleVisualiser" class="py-2 card flex flex-column  align-items-center w-full">
+            <h2 class="flex align-items-center justify-content-center">Data Visualiser</h2>
+            <p-chart type="doughnut" [data]="pieChartData" class="item-chart" [options]="pieChartOptions"
+                (onDataSelect)="syncDataTableWithChart($event)"></p-chart>
+        </p-card>
+    </ng-template>
+</p-splitter>
+
+<p-dialog [(visible)]="itemDialog" [style]="{width: '450px'}" header="Item Details" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <img [src]="workingItem.thumbnail" [alt]="workingItem.thumbnail" class="item-image" *ngIf="workingItem.thumbnail">
+        <div class="field">
+            <label for="title">Name</label>
+            <input type="text" pInputText id="title" [(ngModel)]="workingItem.title" required autofocus />
+            <small class="p-error" *ngIf="isItemSubmitted && !workingItem.title">Title is required.</small>
+        </div>
+        <div class="field">
+            <label for="description" required>Description</label>
+            <textarea id="description" pInputTextarea [(ngModel)]="workingItem.description" required rows="3"
+                cols="20"></textarea>
+            <small class="p-error" *ngIf="isItemSubmitted && !workingItem.description">Description is required.</small>
+        </div>
+
+        <div class="formgrid grid">
+            <div class="field col">
+                <label for="price">Price</label>
+                <p-inputNumber id="price" [(ngModel)]="workingItem.price" mode="currency" currency="USD" locale="en-US"
+                    required></p-inputNumber>
+                <small class="p-error" *ngIf="isItemSubmitted && !workingItem.price">Price is required.</small>
+            </div>
+            <div class="field col">
+                <label for="quantity">Quantity</label>
+                <p-inputNumber id="quantity" [(ngModel)]="workingItem.stock" emptyValue="zero" minValue="0"></p-inputNumber>
+                <small class="p-error" *ngIf="isItemSubmitted && !workingItem.stock && workingItem.stock !== 0">Quantity is required.</small>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" (click)="hideItemDialog()" class="mr-2"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" (click)="saveItem()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

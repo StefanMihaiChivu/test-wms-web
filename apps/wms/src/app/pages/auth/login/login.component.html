@@ -1,0 +1,49 @@
+<div class="h-screen flex w-full surface-ground">
+    <div class="flex flex-1 flex-column surface-ground  align-items-center justify-content-center">
+        <div class="w-11 sm:w-30rem">
+            <div class="flex flex-column">
+                <div style="height:56px; width:56px"
+                    class="bg-primary-50 border-circle flex align-items-center justify-content-center">
+                    <i class="pi pi-sign-in text-primary text-4xl"></i>
+                </div>
+                <div class="mt-4">
+                    <h1 class="m-0 text-primary font-semibold text-4xl">
+                        {{'APP.TITLE' | translate}}
+                    </h1>
+                    <span class="block text-700 mt-2">Please fill the fields to sign-in</span>
+                </div>
+            </div>
+            <form [formGroup]="loginFormGroup">
+                <div class="flex flex-column gap-3 mt-6">
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                        <input type="text" pInputText formControlName="userName" placeholder="{{'LOGIN.USERNAME_PHOLDER' | translate}}">
+                    </div>
+                    <div *ngIf="loginForm['userName'].invalid && isSubmited" class="p-error">
+                        <small *ngIf="loginForm?.['userName']?.['errors']?.['required'] && isSubmited" class="p-error">{{'LOGIN.USERNAME_INPUT_REQ' | translate}}</small>
+                    </div>
+                    <div class="p-inputgroup">
+                        <span class="p-inputgroup-addon"><i class="pi pi-key"></i></span>
+                        <input type="password" pInputText placeholder="{{'LOGIN.PASSWORD_PHOLDER' | translate}}" formControlName="password">
+                    </div>
+                    <small *ngIf="loginForm['password'].invalid && isSubmited" class="p-error">{{'LOGIN.PASSWORD_INPUT_REQ' | translate}}</small>
+                    <div>
+                        <p-button pRipple styleClass="w-full" label="{{'LOGIN.LOGIN_BTN' | translate}}" (onClick)="onSubmit()"></p-button>
+                    </div>
+                    <div class="col-12" *ngIf="isSubmited && authError">
+                        <small class="p-error">{{authMessage}}</small>
+                    </div>
+                    <!-- <div>
+                        <button pButton pRipple class="w-full p-button-text text-primary-500" label="FORGOT PASSWORD?"></button>
+                    </div> -->
+                </div>
+            </form>
+        </div>
+    </div>
+    <div [style.background]="'url(assets/layout/images/pages/accessDenied-bg.jpg)'"
+        class="hidden lg:flex flex-1 align-items-center justify-content-center bg-cover">
+        <img width="350" height="102" src="./assets/images/logo.svg" />
+    </div>
+</div>
+
+<app-config [minimal]="true"></app-config>

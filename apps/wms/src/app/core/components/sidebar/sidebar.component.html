@@ -1,0 +1,29 @@
+<p-sidebar [(visible)]="isVisible" styleClass="sidebar-primeng-override" [modal]="false" [showCloseIcon]="false"
+    [baseZIndex]="10000">
+    <ng-template pTemplate="header">
+        <div class="wms-logo-container">
+            <img class="wms-logo" src="./assets/images/logo.png" />
+        </div>
+    </ng-template>
+      <ng-template pTemplate="content">
+        <div class="wms-sidebar">
+            <div class="links">
+                <ul>
+                    <!-- <li>
+                        <a routerLink="/dashboard" routerLinkActive="wms-active-link"><i class="pi pi-home"></i> Dashboard</a>
+                    </li> -->
+                    <li>
+                        <a routerLink="/items" routerLinkActive="wms-active-link"><i class="pi pi-list"></i> Items</a>
+                    </li>
+                    <li>
+                        <a routerLink="/users" routerLinkActive="wms-active-link"><i class="pi pi-users"></i> Users</a>
+                    </li>
+                    <li>
+                        <a class="logout" (click)="onLogout()"><i class="pi pi-sign-out"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </ng-template>
+      <ng-template pTemplate="footer"></ng-template>
+</p-sidebar>
